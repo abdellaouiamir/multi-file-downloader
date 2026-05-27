@@ -126,6 +126,36 @@ def handelDownloadPage2(url):
                 time.sleep(10)
             return
     
+def handelDownloadPage_witanime(url):
+    driver.get(url)
+    #wait = WebDriverWait(driver, 10)
+    original_window = driver.current_window_handle
+    download_button = driver.find_element(By.CLASS_NAME, "link-button.text-5xl.gay-button")
+    ActionChains(driver).move_to_element(download_button).click().perform()
+    #download_button.click()
+    while True:
+        time.sleep(5)
+        if not check_download():
+            #driver.close()
+            #actions.key_down(Keys.CONTROL).send_keys('w').perform()
+            #driver.switch_to.window(driver.window_handles[0])
+            for window_handle in driver.window_handles:
+                if window_handle != original_window:
+                    driver.switch_to.window(window_handle)
+                    driver.close()
+            driver.switch_to.window(original_window)
+            download_button.click()
+        else:
+            while check_download():
+                time.sleep(10)
+            return
+    return
+    WebDriverWait(driver=driver, timeout=10).until(EC.number_of_windows_to_be(2))
+    for window_handle in driver.window_handles:
+        if window_handle != original_window:
+            driver.switch_to.window(window_name=window_handle)
+            break
+
 urls = []
 
 with open("./output.json", "r") as file:
